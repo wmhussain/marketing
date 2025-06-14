@@ -68,7 +68,7 @@ npm run dev
 
 Default admin credentials:
 - Username: admin
-- Password: admin123
+- Password: *********
 
 **Note:** Change these credentials in production.
 
