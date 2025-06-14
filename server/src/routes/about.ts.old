@@ -1,9 +1,9 @@
 import express from 'express';
-import { v4 as uuidv4 } from 'uuid';
 import lowdb from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { v4 as uuidv4 } from 'uuid';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -11,18 +11,19 @@ const __dirname = dirname(__filename);
 const router = express.Router();
 
 // Initialize database
-const file = join(__dirname, '../db.json');
+const file = join(__dirname, '../../db.json');
 const adapter = new FileSync(file);
 const db = lowdb(adapter);
 
 // Get about content
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const aboutContent = db.get('about').value() || {
-      title: '',
-      description: '',
-      vision: '',
-      mission: '',
+      id: uuidv4(),
+      title: 'About Cloudvillage Trainings',
+      content: 'Welcome to Cloudvillage Trainings. We are dedicated to providing high-quality training in cloud technologies and software development.',
+      imageUrl: '',
+      lastUpdated: new Date().toISOString(),
     };
     res.json(aboutContent);
   } catch (error) {
@@ -32,18 +33,31 @@ router.get('/', (req, res) => {
 });
 
 // Update about content
-router.put('/', (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
-    const { title, description, vision, mission } = req.body;
+    const { id } = req.params;
+    const { title, content, imageUrl } = req.body;
+
+    if (!title || !content) {
+      return res.status(400).json({ message: 'Title and content are required' });
+    }
+
+    await db.read();
+    if (!db.data) {
+      db.data = { about: {} };
+    }
 
     const updatedContent = {
+      id,
       title,
-      description,
-      vision,
-      mission,
+      content,
+      imageUrl,
+      lastUpdated: new Date().toISOString(),
     };
 
-    db.set('about', updatedContent).write();
+    db.data.about = updatedContent;
+    await db.write();
+
     res.json(updatedContent);
   } catch (error) {
     console.error('Error updating about content:', error);
@@ -51,4 +65,4 @@ router.put('/', (req, res) => {
   }
 });
 
-export default router;
+export default router; 

@@ -1,4 +1,4 @@
-import low from 'lowdb';
+import lowdb from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -19,8 +19,13 @@ interface Training {
   title: string;
   description: string;
   duration: string;
+  level: string;
+  prerequisites: string[];
+  objectives: string[];
+  curriculum: string[];
   price: number;
   imageUrl: string;
+  createdAt: string;
 }
 
 interface Event {
@@ -30,100 +35,69 @@ interface Event {
   date: string;
   time: string;
   location: string;
+  type: string;
   imageUrl: string;
+  createdAt: string;
 }
 
-interface Database {
+interface Contact {
+  id: string;
+  name: string;
+  email: string;
+  message: string;
+  createdAt: string;
+}
+
+interface About {
+  title: string;
+  description: string;
+  vision: string;
+  mission: string;
+}
+
+interface Trainer {
+  id: string;
+  name: string;
+  specialization: string;
+  experience: string;
+  education: string[];
+  certifications: string[];
+  achievements: string[];
+  profileImage: string;
+  createdAt: string;
+}
+
+interface DB {
   users: User[];
   trainings: Training[];
   events: Event[];
-  contacts: any[];
+  contacts: Contact[];
+  about: About;
+  trainers: Trainer[];
 }
 
-const adapter = new FileSync(join(__dirname, 'db.json'));
-const db = low(adapter);
+const file = join(__dirname, 'db.json');
+const adapter = new FileSync<DB>(file);
+const db = lowdb(adapter);
 
-async function initDb() {
-  try {
-    console.log('Starting database initialization...');
-    
-    // Initialize with empty arrays if they don't exist
-    db.defaults({ users: [], trainings: [], events: [], contacts: [] }).write();
-    console.log('Database initialized with empty collections');
+// Set defaults
+db.defaults({
+  users: [{
+    id: '1',
+    username: 'admin',
+    password: bcrypt.hashSync('admin123', 10),
+    role: 'admin'
+  }],
+  trainings: [],
+  events: [],
+  contacts: [],
+  about: {
+    title: 'Welcome to CV Training Center',
+    description: 'Your premier destination for professional development',
+    vision: 'To be the leading training center in professional development',
+    mission: 'To provide high-quality training and development opportunities'
+  },
+  trainers: []
+}).write();
 
-    // Check if admin user exists
-    const adminExists = db.get('users').find({ username: 'admin' }).value();
-    console.log('Admin user exists:', !!adminExists);
-
-    if (!adminExists) {
-      console.log('Creating admin user...');
-      const hashedPassword = await bcrypt.hash('admin123', 10);
-      console.log('Password hashed successfully');
-      
-      db.get('users').push({
-        id: '1',
-        username: 'admin',
-        password: hashedPassword,
-        role: 'admin'
-      }).write();
-      console.log('Admin user added to database');
-    }
-
-    // Add sample training courses if they don't exist
-    if (db.get('trainings').value().length === 0) {
-      console.log('Adding sample trainings...');
-      db.get('trainings').push(
-        {
-          id: '1',
-          title: 'Basic Training',
-          description: 'Introduction to basic concepts',
-          duration: '2 hours',
-          price: 99,
-          imageUrl: 'https://source.unsplash.com/random/800x600/?training'
-        },
-        {
-          id: '2',
-          title: 'Advanced Training',
-          description: 'Deep dive into advanced topics',
-          duration: '4 hours',
-          price: 199,
-          imageUrl: 'https://source.unsplash.com/random/800x600/?workshop'
-        }
-      ).write();
-      console.log('Sample trainings added');
-    }
-
-    // Add sample events if they don't exist
-    if (db.get('events').value().length === 0) {
-      console.log('Adding sample events...');
-      db.get('events').push(
-        {
-          id: '1',
-          title: 'Workshop 1',
-          description: 'Hands-on workshop',
-          date: '2024-03-01',
-          time: '10:00',
-          location: 'Main Hall',
-          imageUrl: 'https://source.unsplash.com/random/800x600/?workshop'
-        },
-        {
-          id: '2',
-          title: 'Workshop 2',
-          description: 'Advanced techniques',
-          date: '2024-03-15',
-          time: '14:00',
-          location: 'Conference Room',
-          imageUrl: 'https://source.unsplash.com/random/800x600/?conference'
-        }
-      ).write();
-      console.log('Sample events added');
-    }
-
-    console.log('Database initialization completed successfully');
-  } catch (error) {
-    console.error('Error initializing database:', error);
-    process.exit(1);
-  }
-}
-
-initDb(); 
+console.log('Database initialized successfully!');

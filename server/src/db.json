@@ -40,16 +40,6 @@
   ],
   "events": [
     {
-      "id": "1",
-      "title": "VMware Workshop",
-      "description": "Hands-on workshop for VMware vSphere administration.",
-      "startDate": "2025-06-21T07:40:22.040Z",
-      "endDate": "2025-06-26T07:40:22.040Z",
-      "location": "Virtual",
-      "type": "online",
-      "createdAt": "2025-06-14T07:40:22.040Z"
-    },
-    {
       "id": "1749893285937",
       "trainingId": "1749893193079",
       "title": "Azure AI Engineer Associate",
@@ -59,7 +49,24 @@
       "location": "Online",
       "imageUrl": "https://learn.microsoft.com/en-us/media/learn/certification/badges/microsoft-certified-associate-badge.svg",
       "date": "2025-06-16"
+    },
+    {
+      "id": "2e791d06-9040-4dad-a67a-268c7a0f6c5e",
+      "title": "Microsoft Certified: Azure AI Engineer Associate",
+      "description": "Design and implement an Azure AI solution using Azure AI services, Azure AI Search, and Azure Open AI.",
+      "date": "2025-06-23",
+      "time": "09:00",
+      "location": "Online",
+      "imageUrl": "https://learn.microsoft.com/en-us/media/learn/certification/badges/microsoft-certified-associate-badge.svg",
+      "createdAt": "2025-06-14T15:02:10.237Z"
     }
   ],
-  "contacts": []
+  "contacts": [],
+  "about": {
+    "title": "Welcome to CV Training Center",
+    "description": "Your premier destination for professional development",
+    "vision": "To be the leading training center in professional development",
+    "mission": "To provide high-quality training and development opportunities"
+  },
+  "trainers": []
 }
