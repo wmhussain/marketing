@@ -1,0 +1,129 @@
+import express from 'express';
+import { Low } from 'lowdb';
+import { JSONFile } from 'lowdb/node';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+import { v4 as uuidv4 } from 'uuid';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const router = express.Router();
+
+// Initialize database
+const file = join(__dirname, '../../db.json');
+const adapter = new JSONFile(file);
+const db = new Low(adapter);
+
+// Get all trainers
+router.get('/', async (req, res) => {
+  try {
+    await db.read();
+    const trainers = db.data?.trainers || [];
+    res.json(trainers);
+  } catch (error) {
+    console.error('Error fetching trainers:', error);
+    res.status(500).json({ message: 'Error fetching trainers' });
+  }
+});
+
+// Add new trainer
+router.post('/', async (req, res) => {
+  try {
+    const { name, title, bio, imageUrl, linkedinUrl, expertise } = req.body;
+
+    if (!name || !title || !bio) {
+      return res.status(400).json({ message: 'Name, title, and bio are required' });
+    }
+
+    await db.read();
+    if (!db.data) {
+      db.data = { trainers: [] };
+    }
+
+    const newTrainer = {
+      id: uuidv4(),
+      name,
+      title,
+      bio,
+      imageUrl,
+      linkedinUrl,
+      expertise: expertise || [],
+    };
+
+    db.data.trainers.push(newTrainer);
+    await db.write();
+
+    res.status(201).json(newTrainer);
+  } catch (error) {
+    console.error('Error adding trainer:', error);
+    res.status(500).json({ message: 'Error adding trainer' });
+  }
+});
+
+// Update trainer
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, title, bio, imageUrl, linkedinUrl, expertise } = req.body;
+
+    if (!name || !title || !bio) {
+      return res.status(400).json({ message: 'Name, title, and bio are required' });
+    }
+
+    await db.read();
+    if (!db.data) {
+      db.data = { trainers: [] };
+    }
+
+    const trainerIndex = db.data.trainers.findIndex((t: any) => t.id === id);
+    if (trainerIndex === -1) {
+      return res.status(404).json({ message: 'Trainer not found' });
+    }
+
+    const updatedTrainer = {
+      id,
+      name,
+      title,
+      bio,
+      imageUrl,
+      linkedinUrl,
+      expertise: expertise || [],
+    };
+
+    db.data.trainers[trainerIndex] = updatedTrainer;
+    await db.write();
+
+    res.json(updatedTrainer);
+  } catch (error) {
+    console.error('Error updating trainer:', error);
+    res.status(500).json({ message: 'Error updating trainer' });
+  }
+});
+
+// Delete trainer
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await db.read();
+    if (!db.data) {
+      db.data = { trainers: [] };
+    }
+
+    const trainerIndex = db.data.trainers.findIndex((t: any) => t.id === id);
+    if (trainerIndex === -1) {
+      return res.status(404).json({ message: 'Trainer not found' });
+    }
+
+    db.data.trainers.splice(trainerIndex, 1);
+    await db.write();
+
+    res.status(204).send();
+  } catch (error) {
+    console.error('Error deleting trainer:', error);
+    res.status(500).json({ message: 'Error deleting trainer' });
+  }
+});
+
+export default router; 

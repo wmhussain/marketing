@@ -1,0 +1,65 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "password": "$2a$10$V8iwUfbxVBYtByJ2nkuCMu8sW06u1svZpqSvjbU0fDk2Yx7xwOFoS",
+      "role": "admin"
+    }
+  ],
+  "trainings": [
+    {
+      "id": "1",
+      "title": "VMware vSphere Administration",
+      "description": "Comprehensive training on VMware vSphere administration and management.",
+      "duration": "5 days",
+      "price": 2500,
+      "type": "onsite",
+      "imageUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+      "createdAt": "2025-06-14T07:40:22.039Z"
+    },
+    {
+      "id": "2",
+      "title": "Microsoft Azure Fundamentals",
+      "description": "Learn the basics of Microsoft Azure cloud platform and services.",
+      "duration": "3 days",
+      "price": 1500,
+      "type": "online",
+      "imageUrl": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+      "createdAt": "2025-06-14T07:40:22.040Z"
+    },
+    {
+      "id": "1749896570160",
+      "title": "Microsoft Certified: Azure AI Engineer Associate",
+      "description": "Design and implement an Azure AI solution using Azure AI services, Azure AI Search, and Azure Open AI.",
+      "content": "Overview\nAs a Microsoft Azure AI engineer, you build, manage, and deploy AI solutions that leverage Azure AI.\n\nYour responsibilities include participating in all phases of AI solutions development, including:\n\nRequirements definition and design\nDevelopment\nDeployment\nIntegration\nMaintenance\nPerformance tuning\nMonitoring\nYou work with solution architects to translate their vision. You also work with data scientists, data engineers, Internet of Things (IoT) specialists, infrastructure administrators, and other software developers to:\n\nBuild complete and secure end-to-end AI solutions.\nIntegrate AI capabilities in other applications and solutions.\nAs an Azure AI engineer, you have experience developing solutions that use languages such as:\n\nPython\nC#\nYou should be able to use Representational State Transfer (REST) APIs and SDKs to build secure image processing, video processing, natural language processing, knowledge mining, and generative AI solutions on Azure. You should:\n\nUnderstand the components that make up the Azure AI portfolio and the available data storage options.\nBe able to apply responsible AI principles.\n",
+      "courseUrl": "https://learn.microsoft.com/en-us/credentials/certifications/azure-ai-engineer",
+      "price": "800",
+      "imageUrl": "https://learn.microsoft.com/en-us/media/learn/certification/badges/microsoft-certified-associate-badge.svg"
+    }
+  ],
+  "events": [
+    {
+      "id": "1",
+      "title": "VMware Workshop",
+      "description": "Hands-on workshop for VMware vSphere administration.",
+      "startDate": "2025-06-21T07:40:22.040Z",
+      "endDate": "2025-06-26T07:40:22.040Z",
+      "location": "Virtual",
+      "type": "online",
+      "createdAt": "2025-06-14T07:40:22.040Z"
+    },
+    {
+      "id": "1749893285937",
+      "trainingId": "1749893193079",
+      "title": "Azure AI Engineer Associate",
+      "description": "Design and implement an Azure AI solution using Azure AI services, Azure AI Search, and Azure Open AI.",
+      "time": "09:00",
+      "timeZone": "Asia/Singapore",
+      "location": "Online",
+      "imageUrl": "https://learn.microsoft.com/en-us/media/learn/certification/badges/microsoft-certified-associate-badge.svg",
+      "date": "2025-06-16"
+    }
+  ],
+  "contacts": []
+}

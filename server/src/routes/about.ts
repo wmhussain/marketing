@@ -1,0 +1,69 @@
+import express from 'express';
+import { Low } from 'lowdb';
+import { JSONFile } from 'lowdb/node';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+import { v4 as uuidv4 } from 'uuid';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const router = express.Router();
+
+// Initialize database
+const file = join(__dirname, '../../db.json');
+const adapter = new JSONFile(file);
+const db = new Low(adapter);
+
+// Get about content
+router.get('/', async (req, res) => {
+  try {
+    await db.read();
+    const aboutContent = db.data?.about || {
+      id: uuidv4(),
+      title: 'About Cloudvillage Trainings',
+      content: 'Welcome to Cloudvillage Trainings. We are dedicated to providing high-quality training in cloud technologies and software development.',
+      imageUrl: '',
+      lastUpdated: new Date().toISOString(),
+    };
+    res.json(aboutContent);
+  } catch (error) {
+    console.error('Error fetching about content:', error);
+    res.status(500).json({ message: 'Error fetching about content' });
+  }
+});
+
+// Update about content
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, content, imageUrl } = req.body;
+
+    if (!title || !content) {
+      return res.status(400).json({ message: 'Title and content are required' });
+    }
+
+    await db.read();
+    if (!db.data) {
+      db.data = { about: {} };
+    }
+
+    const updatedContent = {
+      id,
+      title,
+      content,
+      imageUrl,
+      lastUpdated: new Date().toISOString(),
+    };
+
+    db.data.about = updatedContent;
+    await db.write();
+
+    res.json(updatedContent);
+  } catch (error) {
+    console.error('Error updating about content:', error);
+    res.status(500).json({ message: 'Error updating about content' });
+  }
+});
+
+export default router; 

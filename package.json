@@ -1,0 +1,18 @@
+{
+  "name": "mazhar-warsi-website",
+  "version": "1.0.0",
+  "description": "Professional website for Mazhar Hussain Warsi",
+  "scripts": {
+    "install-all": "npm install && cd client && npm install && cd ../server && npm install",
+    "init-db": "cd server && npm run init-db",
+    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\"",
+    "build": "cd client && npm run build && cd ../server && npm run build",
+    "start": "cd server && npm start"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.1"
+  },
+  "dependencies": {
+    "lowdb": "^1.0.0"
+  }
+}
