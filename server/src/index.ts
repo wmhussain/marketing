@@ -1,10 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-import lowdb from 'lowdb';
-import FileSync from 'lowdb/adapters/FileSync';
+import connectDB from './config/db';
 import authRoutes from './routes/auth.js';
 import trainingRoutes from './routes/trainings.js';
 import eventRoutes from './routes/events.js';
@@ -13,13 +10,13 @@ import aboutRoutes from './routes/about.js';
 import trainersRoutes from './routes/trainers.js';
 import { auth } from './middleware/auth';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5001;
+
+// Connect to MongoDB
+connectDB();
 
 // Middleware
 app.use(cors({
@@ -27,14 +24,6 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
-
-// Initialize database
-const file = join(__dirname, 'db.json');
-const adapter = new FileSync(file);
-const db = lowdb(adapter);
-
-// Set defaults
-db.defaults({ users: [], trainings: [], events: [], contacts: [], about: {}, trainers: [] }).write();
 
 // Routes
 app.use('/api/auth', authRoutes);
